@@ -142,4 +142,158 @@
  * 六,开发一个Loader
  * Loader作为Webpack的核心机制,内部的工作原理却非常简单,接下来我们一起来开发一个自己的Loader,通过这个开发过程再来深入了解Loader
  * 的工作原理.
+ * 
+ * 需求:开发一个可以加载markdown文件的加载器,以便可以在代码中直接导入md文件.我们都应该知道markdown一般是需要转换为html之后再
+ * 呈现到页面上的,所以我希望导入md文件后,直接得到markdown转换后的html字符串,如下图:
+ * 03.2 所示
+ * 由于这里需要直观地演示,就不再单独创建一个npm模块,而是直接在项目根目录下创建一个markdown-loader.js文件,完成后就可把这个模块发布到
+ * npm上作为一个独立的模块使用.
+ * 项目结果与核心代码如下:
+ * 03-webpack-loader
+ *   ------src
+ *      ------about.md
+ *      ------main.js
+ *   -------package.json
+ *   -------markdown-loader.js
+ *   -------webpack.config.js
+ * 
+ * 每个Webpack的Loader都需要导出一个函数,这个函数就是我们这个Loader对资源的处理过程,它的输入就是加载到的资源文件内容,输出就是我们
+ * 加工后的结果. 我们通过source参数接收输入,通过返回值输出.这里我们先尝试打印一下source,然后在函数的内部直接返回一个字符串hello loader~,
+ * 具体如下:
+ * 
+ * // ./markdown-loader.js
+ * module.exports = source => {
+ *      //加载到的模块内容 => '# About \n\nthis is a markdown file.'
+ *      console.log(source)
+ *      //返回值就是最终被打包的内容
+ *      return 'hello loader-'
+ * }
+ * 
+ * 完成以后,我们回到Webpack配置文件中添加一个加载器规则,这里匹配到的扩展名是.md,使用的加载器就是我们刚刚编写的这个
+ * markdown-loader.js模块,具体如下:
+ * 
+ * // ./webpack.config.js
+ * module.exports = {
+ *     entry: './src/main.js',
+ *     output: {
+ *         filename:'bundle.js'
+ *     },
+ *     module: {
+ *        rules: [
+ *           {
+ *              test: /\.md$/,
+ *              //直接使用相对路径
+ *              use: './markdown-loader'
+ *           }
+ *        ]
+ *     }
+ * }
+ * 
+ * TIPS: 这里的use中不仅可以使用模块名称,还可以使用模块文件路径,这点与Node中的require函数是一样的.
+ * 配置完成后,再次运行命令: npx webpack
+ * 
+ * 打包过程中命令行确实打印出来了我们所导入的Markdown文件内容,这就意味着Loader函数的参数确实是文件的
+ * 内容.
+ * 但同时也报出了一个解析错误:
+ * You may need an additional loader to handle the result of these loaders.
+ * 
+ * 为甚么会出现以上的错误?
+ * 其实Webpack加载资源文件的过程类似于一个工作管道,你可以在这个过程中依次使用多个Loader,但是最终这个管道
+ * 结果过后的结果必须是一段标准的JS代码字符串.
+ * 如图: 03.3 示例图
+ * 所以我们这里才会出现上面提到的错误提示,那解决的办法也就很明显了:
+ * >直接在这个Loader的最后返回一段JS代码字符串;
+ * >在找一个合适的加载器,在后面接着处理我们这里得到的结果.
+ * 
+ * 1. 先来尝试第一种办法,回到 markdown-loader 中,我们将返回的字符串内容修改为
+ * console.log('hello loader~'),然后再次运行打包,如下:
+ * //  ./markdown-loader.js
+ * module.exports = source => {
+ *     //加载到的模块内容 => '#About\n\nthis is a markdown file.'
+ *     console.log(source)
+ *     //返回值就是最终被打包的内容
+ *     return 'hello loader ~'
+ *     
+ *     return 'console.log("hello loader ~")'
+ * }
+ * 
+ * 此时打包的结果,如下bundle_md.js.
+ * 这个模块里面非常简单,就是把我们刚刚返回的字符串直接拼接到了该模块中,这也解释了刚刚Loader管道最后必须返回JS代码的原因,
+ * 因为如果随便返回一个内容,放到这里语法就不通过了.
+ */
+
+/**
+ * 七, 实现Loader的逻辑
+ * 了解了Loader大致的工作机制后,再回到markdown-loader.js中,接着完成需求,这里需要安装一个能过将Markdown解析为HTML的模块,
+ * 叫做marked.
+ * 
+ * 安装完成后,我们在markdown-loader.js中导入这个模块,然后使用这个模块去解析我们的source. 这里解析完的结果就是一段HTML字符串,
+ * 如果我们直接返回的话同样会面临Webpack无法解析模块的问题,正确的做法是把这段HTML字符串拼接为一段JS代码.
+ * 
+ * 此时我们希望返回的代码是通过module.exports导出这段HTML字符串,这样外界导入模块时就可以接受到这个HTML字符串了,如果只是简单地拼接,
+ * 那HTML种的换行和引号就都可能会造成语法错误,所以我这里使用了一个小技巧,如下:
+ * 
+ * // ./markdown-loader.js
+ * const marked = require('marked')
+ * module.exports = source => {
+ *     //1. 将markdown 转换为 html 字符串
+ *     const html = marked(source)
+ *     //2. 将html字符串拼接为一段导出字符串的JS代码
+ *     const code = `module.exports = ${JSON.stringify(html)}`
+ *     return code
+ * }
+ * 先通过 JSON.stringify() 将字段字符串转换为标准的JSON字符串,然后再参与拼接,这样就不会有问题了.
+ * 
+ * 我们回到命令行再次运行打包,打包后的结果就是我们所需要的了.
+ * 
+ * 除了 module.exports 这种方式, Webpack 还允许我们在返回的代码中使用ES Modules的方式导出,例如,
+ * 我们这里将module.exports修改了 export default,然后运行打包,结果同样是可以的,Webpack内部会自动
+ * 转换ES Modules代码.
+ * //  ./markdown-loader.js
+ * const marked = require('marked')
+ * 
+ * module.exports = source => {
+ *     const html = marked(source)
+ *     const code = `export default ${JSON.stringify(html)}`
+ *     return code
+ * }
+ */
+
+/**
+ * 八,多个Loader配合
+ * 我们还可以尝试一下刚刚说的第二种思路,就是在我们这个markdown-loader中直接返回HTML字符串,然后交给下一个Loader处理,这
+ * 就涉及多个Loader相互配合工作的情况了.
+ * 
+ * 回到代码中,这里直接返回marked解析后的HTML,如下:
+ * //  ./markdown-loader.js
+ * const marked = require('marked')
+ * 
+ * module.exports = source => {
+ *     // 1. 将 markdown 转换为 html 字符串
+ *     const html = marked(source)
+ *     return html
+ * }
+ * 
+ * 然后我们再安装一个处理HTML的Loader,叫做html-loader,如下:
+ * //  ./webpack.config.js
+ * module.exports = {
+ *       entry: './src/main.js',
+ *       output: {
+ *           filename:'bundle.js',
+ *       },
+ *       module: {
+ *          rules: [
+ *              test: /\.md$/,
+ *              use: [
+ *                 'html-loader',
+ *                 './markdown-loader'
+ *              ]
+ *          ]
+ *       }
+ * }
+ * 安装完成过后回到配置文件,这里同样把use属性修改为一个数组,以便依次使用多个Loader,不过同样需要
+ * 注意,这里的执行顺序是从后往前,也就是说我们应该把先执行的markdown-loader放在后面,html-loader
+ * 放在前面.
+ * 
+ * 至此,就完成了这个markdown-loader模块.
  */

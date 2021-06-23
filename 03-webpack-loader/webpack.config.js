@@ -12,11 +12,18 @@ const path = require('path')
     mode:'none',
     module:{
         rules:[
+            // {
+            //     test:/\.css$/,
+            //     use:[
+            //         'style-loader',
+            //         'css-loader'
+            //     ]
+            // },
             {
-                test:/.css$/,
+                test: /\.md$/,
                 use:[
-                    'style-loader',
-                    'css-loader'
+                    'html-loader',
+                    './markdown-loader'
                 ]
             }
         ]
