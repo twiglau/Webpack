@@ -223,5 +223,139 @@
  * Webpack中支持使用动态导入的方式实现模块的按需加载,而且所有动态导入的模块都会被自动提取到
  * 单独的 bundle 中,从而实现分包.
  * 
+ * 相比于多入口的方式,动态导入更为灵活,因为我们可以通过代码中的逻辑去控制需不需要加载某个
+ * 模块,或者什么时候加载某个模块.而且我们分包目的中,很重要的一点就是让模块显现按需加载,从而
+ * 提供应用的响应速度.
+ * 
+ * 接下来,具体来看如何使用动态导入特性,这里设计了一个发挥按需加载作用的场景,如下:
+ * 
+ * 10.5 示例图
+ * 
+ * 在这个应用的主题区域,如果访问的是首页,它显示的是一个文章列表,如果访问的是相册页,它显示的
+ * 的就是相册列表.
+ * 
+ * 回到代码中,来看目前的实现方式,如下:
+ * 
+ * -- src
+ *   -- album
+ *     -- album.css
+ *     -- album.js
+ *   -- common
+ *     -- fetch.js
+ *     -- global.css
+ *   -- posts
+ *     -- posts.css
+ *     -- posts.js
+ *   -- index.html
+ *   -- index.js
+ * -- package.json
+ * -- webpack.config.js
+ * 
+ * 文章列表对应的是这里的posts组件,而相册列表对应的是 album 组件,在打包入口(index.js)
+ * 中同时导入了这两个模块,然后根据页面锚点的变化决定显示那个组件,核心代码如下:
+ * 
+ * //  ./src/index.js
+ * import posts from './posts/posts'
+ * import album from './album/album'
+ * const update = () => {
+ *    const hash = window.location.hash || '#posts'
+ *    const mainElement = document.querySelector('.main')
+ *    mainElement.innerHTML = ''
+ *    if(hash === '#posts') {
+ *       mainElement.appendChild(album())
+ *    } else if(hash === '#album') {
+ *       mainElement.appendChild(album())
+ *    }
+ * }
+ * window.addEventListener('hashchange',update)
+ * update()
+ * 
+ * 在这种情况下,就可能产生资源浪费. 假如:
+ * 如果用户只需要访问其中一个页面,那么加载另外一个页面对应的组件就是浪费.
+ * 
+ * 如果采用动态导入的方式,就不会产生浪费的问题,因为所有的组件都是惰性加载,只有用到的时候
+ * 才会去加载,具体如下:
+ * 
+ * //  ./src/index.js
+ * // import posts from './posts/posts'
+ * // import album from './album/album'
+ * const update = () => {
+ *    const hash = window.location.hash || '#posts'
+ *    const mainElement = document.querySelector('.main')
+ *    mainElement.innerHTML = ''
+ *    if(hash === '#posts') {
+ *       //mainElement.appendChild(posts())
+ *       import('./posts/posts').then(({ default:posts }) =>{
+ *          mainElement.appendChild(posts())
+ *       })
+ *    } else if (hash === '#album') {
+ *       //mainElement.appendChild(album())
+ *       import('./album/album').then(({default:album}) => {
+ *          mainElement.appendChild(album())
+ *       })
+ *    }
+ *  
+ * }
+ * window.addEventListener('hashchange',update)
+ * update()
+ * 
+ * P.S. 为了动态导入模块,可以将import关键字作为函数调用. 当以这种方式使用时,import
+ * 函数返回一个Promise对象. 这就是 ES Modules 标准中的 Dynamic Imports(https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#Dynamic_Imports).
+ * 
+ * 这里先移除 import 这种静态导入,然后在需要使用组件的地方通过import函数导入指定路径,
+ * 那这个方法返回的是一个Promise. 在这个Promsie的then方法中我们能够拿到模块对象. 由于
+ * 我们这里的posts 和 album 模块是以默认成员导出,所以我们需要解构对象中的default,先拿到
+ * 导出成员,然后再正常使用这个导出成员.
+ * 
+ * 完成以后,Webpack Dev Server 自动重新打包,再次回到浏览器,此时应用仍然是可以正常工作的.
+ * 
+ * 那我们再回到命令性终端,重新运行打包,然后看看此时的打包结果具体是怎样的. 打包完成以后我们打开
+ * dist目录,结果如下:
+ * 
+ * 10.6 示例图
+ * 
+ * 此时dist目录下就会额外多出三个JS文件,其中有两个文件是动态导入的模块,另外一个文件时动态导入
+ * 模块中公共的模块,这三个文件就是有动态自动分包产生的.
+ * 
+ * 以上就是动态导入在Webpack中的使用,整个过程无需额外配置任何地方,只需要按照ES Modules动态
+ * 导入的方式导入模块就可以了,Webpack内部会自动处理分包和按需加载.
+ * 
+ * 如果你使用的是Vue.js之类的SPA开发框架的话,那你项目中路由映射的组件就可以通过这种动态导入的
+ * 方式实现按需加载,从而实现分包.
  * 
  */
+
+/**
+ * 六,魔法注释
+ * 默认通过动态导入产生的bundle文件,它的name就是一个序号,这并没有什么不好,因为大多数
+ * 时候,在生产环境中我们根本不用关心资源文件的名称.
+ * 
+ * 但是如果你还是需要给这些bundle命名的话,就可以使用Webpack所特有的魔法注释去实现,具体如下:
+ * 
+ * //魔法注释
+ * /
+ * 
+ * */
+ import(/** webpackChunkName:'posts' */'./posts/posts').then(({default:posts}) => {
+     mainElement.appendElement(posts())
+ })
+
+ /**
+  * 所谓魔法注释,就是在import函数的形式参数位置,添加一个行内注释,这个注释有一个特定的格式:
+  * webpackChunkName:'', 这样就可以给分包的chunk起名字了.
+  * 
+  * 完成过后,再次打开命令行终端,运行Webpack打包,那此时我们生成bundle的name就会使用刚刚注释
+  * 中提供的名称了,具体如下:
+  * 
+  * 10.7 示例图
+  * 
+  * 除此之外,魔法注释还有个特殊用途:
+  * 如果你的chunkName相同的话,那相同的chunkName最终就会被打包到一起,例如:
+  * 我们这里可以把这两个chunkName都设置为components,然后再次运行打包,那此时
+  * 这两个模块都会被打包到一个文件中,具体操作如下:
+  * 
+  * 10.8 示例图
+  * 
+  * 借助这个特点,你就可以根据自己的时机情况,灵活组织动态加载模块了.
+  */
+ 
