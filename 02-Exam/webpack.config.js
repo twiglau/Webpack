@@ -1,5 +1,5 @@
 'use strict';
-
+const webpack = require('webpack')
 const path = require('path')
 module.exports = {
     // entry: './src/index.js', // 单入口
@@ -12,7 +12,7 @@ module.exports = {
         // filename: 'bundle.js' // 单入口
         filename: '[name].js'
     },
-    mode: 'production',
+    mode: 'development',
     module: {
         rules: [
             {
@@ -51,5 +51,17 @@ module.exports = {
                 use: 'file-loader'
             }
         ]
+    },
+    plugins: [
+        // 启用这个插件以使 webpack 将变化通知到 WDS,
+        // 这个插件会自动启用 --hot 标志
+        new webpack.HotModuleReplacementPlugin()
+    ],
+    devServer: {
+        contentBase: './dist',
+        // 热加载失败后不刷新,如果实现了客户端接口,开启它就比较合适
+        // hotOnly: true,
+        // 如果出现错误时, 你仍然希望它刷新,请设置: 
+        hot: true
     }
 }

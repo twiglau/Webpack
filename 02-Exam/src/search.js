@@ -7,7 +7,7 @@ import logo from './images/friend_img.png'
 class Search extends React.Component {
     render () {
         return <div className="search-text">
-            <span>Search Text 111 222</span>
+            <span>Search Text 111</span>
             <img src={ logo }  />
         </div>;
     }
