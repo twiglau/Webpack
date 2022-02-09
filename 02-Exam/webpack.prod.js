@@ -3,6 +3,7 @@ const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 module.exports = {
     // entry: './src/index.js', // 单入口
     entry: {
@@ -35,7 +36,25 @@ module.exports = {
                     MiniCssExtractPlugin.loader,
                     // 'style-loader',
                     'css-loader',
-                    'less-loader'
+                    'less-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: () => [
+                                require('autoprefixer')({
+                                    // 最近两个版本, 使用人数量 > 1% , 兼容 ios7
+                                    browsers: ['last 2 version', '>1%', 'ios 7']
+                                })
+                            ]
+                        }
+                    },
+                    {
+                        loader: 'px2rem-loader',
+                        options: {
+                            remUnit: 75,
+                            remPrecision: 8
+                        }
+                    }
                 ]
             },
             {
@@ -106,7 +125,8 @@ module.exports = {
                 minifyJS: true,
                 removeComments: false
             }
-        })
+        }),
+        new CleanWebpackPlugin()
 
     ]
 }

@@ -1,6 +1,7 @@
 'use strict';
 const webpack = require('webpack')
 const path = require('path')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 module.exports = {
     // entry: './src/index.js', // 单入口
     entry: {
@@ -55,7 +56,8 @@ module.exports = {
     plugins: [
         // 启用这个插件以使 webpack 将变化通知到 WDS,
         // 这个插件会自动启用 --hot 标志
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new CleanWebpackPlugin()
     ],
     devServer: {
         contentBase: './dist',
