@@ -1,11 +1,13 @@
 'use strict';
 const path = require('path')
 const glob = require('glob');
+const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin')
+const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin');
+
 const setMPA = () => {
     const entry = {};
     const htmlWebpackPlugins = [];
@@ -53,7 +55,7 @@ module.exports = {
         // filename: 'bundle.js' // 单入口
         filename: '[name]_[chunkhash:8].js'
     },
-    mode: 'production',
+    mode: 'production', // none 默认不开启 tree-shaking, production - 开启 tree-shaking
     module: {
         rules: [
             {
@@ -137,37 +139,38 @@ module.exports = {
             cssProcessor: require('cssnano')
         }),
         new CleanWebpackPlugin(),
-        // new HtmlWebpackExternalsPlugin({
-        //     externals: [
-        //         {
-        //             module: 'react',
-        //             entry: 'https://now8.gtimg.com/now/lib/16.8.6/react.min.js',
-        //             global: 'React'
-        //         },
-        //         {
-        //             module: 'react-dom',
-        //             entry: 'https://now8.gtimg.com/now/lib/16.8.6/react-dom.min.js',
-        //             global: 'ReactDOM'
-        //         },
-        //     ]
-        // })
+        new webpack.optimize.ModuleConcatenationPlugin(),
+        new HtmlWebpackExternalsPlugin({
+            externals: [
+                {
+                    module: 'react',
+                    entry: 'https://now8.gtimg.com/now/lib/16.8.6/react.min.js',
+                    global: 'React'
+                },
+                {
+                    module: 'react-dom',
+                    entry: 'https://now8.gtimg.com/now/lib/16.8.6/react-dom.min.js',
+                    global: 'ReactDOM'
+                },
+            ]
+        })
     ].concat(htmlWebpackPlugins),
-    optimization: {
-        splitChunks: {
-            minSize: 0, // 分离公共文件时,需要设置
-            cacheGroups: {
-                commons: {
-                    // 1. 分离第三方包 chunk 的名字 vendors,需要添加到 chunks里面
-                    // test: /(react|react-dom)/,
-                    // name: 'vendors',
-                    // chunks: 'all',
+    // optimization: {
+    //     splitChunks: {
+    //         minSize: 0, // 分离公共文件时,需要设置
+    //         cacheGroups: {
+    //             commons: {
+    //                 // 1. 分离第三方包 chunk 的名字 vendors,需要添加到 chunks里面
+    //                 // test: /(react|react-dom)/,
+    //                 // name: 'vendors',
+    //                 // chunks: 'all',
 
-                    // 2. 分离公共文件
-                    name: 'commons',
-                    chunks: 'all',
-                    minChunks: 2, //至少引用两次
-                }
-            }
-        }
-    }
+    //                 // 2. 分离公共文件
+    //                 name: 'commons',
+    //                 chunks: 'all',
+    //                 minChunks: 2, //至少引用两次
+    //             }
+    //         }
+    //     }
+    // }
 }
