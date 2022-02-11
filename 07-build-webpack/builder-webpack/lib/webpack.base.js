@@ -7,6 +7,7 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+// 获取当前项目运行的目录
 const projectRoot = process.cwd();
 
 const setMPA = () => {
@@ -37,9 +38,9 @@ const setMPA = () => {
             minifyCSS: true,
             minifyJS: true,
             removeComments: false,
-          },
-        }),
-      );
+          }
+        })
+      )
     });
 
   return {
@@ -84,7 +85,7 @@ module.exports = {
             options: {
               plugins: () => [
                 autoprefixer({
-                  browsers: ['last 2 version', '>1%', 'ios 7'],
+                  overrideBrowserslist: ['last 2 version', '>1%', 'ios 7'],
                 }),
               ],
             },
