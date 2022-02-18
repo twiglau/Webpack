@@ -1,0 +1,220 @@
+ DONE  Compiled successfully in 4026ms11:45:38
+
+{
+  "errors": [],
+  "warnings": [],
+  "modules": [
+    {
+      "id": 0,
+      "identifier": "external \"React\"",
+      "name": "external \"React\"",
+      "index": 4,
+      "index2": 3,
+      "size": 42,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        1
+      ],
+      "issuer": "/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/babel-loader/lib/index.js!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/src/search/index.js",
+      "issuerId": null,
+      "issuerName": "./src/search/index.js",
+      "issuerPath": [
+        {
+          "id": null,
+          "identifier": "/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/babel-loader/lib/index.js!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/src/search/index.js",
+          "name": "./src/search/index.js"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "id": 1,
+      "identifier": "/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/babel-loader/lib/index.js!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/common/index.js",
+      "name": "./common/index.js",
+      "index": 2,
+      "index2": 1,
+      "size": 54,
+      "cacheable": true,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        0,
+        1
+      ],
+      "issuer": "/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/babel-loader/lib/index.js!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/src/search/index.js",
+      "issuerId": null,
+      "issuerName": "./src/search/index.js",
+      "issuerPath": [
+        {
+          "id": null,
+          "identifier": "/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/babel-loader/lib/index.js!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/src/search/index.js",
+          "name": "./src/search/index.js"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "id": 2,
+      "identifier": "external \"ReactDOM\"",
+      "name": "external \"ReactDOM\"",
+      "index": 5,
+      "index2": 4,
+      "size": 42,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        1
+      ],
+      "issuer": "/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/babel-loader/lib/index.js!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/src/search/index.js",
+      "issuerId": null,
+      "issuerName": "./src/search/index.js",
+      "issuerPath": [
+        {
+          "id": null,
+          "identifier": "/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/babel-loader/lib/index.js!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/src/search/index.js",
+          "name": "./src/search/index.js"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "id": 3,
+      "identifier": "/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/file-loader/dist/cjs.js??ref--7-0!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/src/search/images/friend_img.png",
+      "name": "./src/search/images/friend_img.png",
+      "index": 8,
+      "index2": 7,
+      "size": 69,
+      "cacheable": true,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        1
+      ],
+      "issuer": "/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/babel-loader/lib/index.js!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/src/search/index.js",
+      "issuerId": null,
+      "issuerName": "./src/search/index.js",
+      "issuerPath": [
+        {
+          "id": null,
+          "identifier": "/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/babel-loader/lib/index.js!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/src/search/index.js",
+          "name": "./src/search/index.js"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "id": 4,
+      "identifier": "/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/mini-css-extract-plugin/dist/loader.js!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/css-loader/dist/cjs.js!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/less-loader/dist/cjs.js!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/postcss-loader/src/index.js??ref--6-3!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/px2rem-loader/index.js??ref--6-4!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/src/search/search_less.less",
+      "name": "./src/search/search_less.less",
+      "index": 6,
+      "index2": 6,
+      "size": 39,
+      "cacheable": true,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        1
+      ],
+      "issuer": "/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/babel-loader/lib/index.js!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/src/search/index.js",
+      "issuerId": null,
+      "issuerName": "./src/search/index.js",
+      "issuerPath": [
+        {
+          "id": null,
+          "identifier": "/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/babel-loader/lib/index.js!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/src/search/index.js",
+          "name": "./src/search/index.js"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "id": 5,
+      "identifier": "/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/babel-loader/lib/index.js!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/src/index/index.js e6f9b0af070f19f3d1a0f31d7adeb5c5",
+      "name": "./src/index/index.js + 1 modules",
+      "index": 0,
+      "index2": 2,
+      "size": 138,
+      "cacheable": true,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        0
+      ],
+      "issuer": null,
+      "issuerId": null,
+      "issuerName": null,
+      "issuerPath": null,
+      "failed": false,
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "id": 6,
+      "identifier": "/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/babel-loader/lib/index.js!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/src/search/index.js 238c13ccd032ef75edc69027e1cdd455",
+      "name": "./src/search/index.js + 1 modules",
+      "index": 3,
+      "index2": 9,
+      "size": 4740,
+      "cacheable": true,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        1
+      ],
+      "issuer": null,
+      "issuerId": null,
+      "issuerName": null,
+      "issuerPath": null,
+      "failed": false,
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "id": 7,
+      "identifier": "/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/babel-loader/lib/index.js!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/src/search/text.js",
+      "name": "./src/search/text.js",
+      "index": 10,
+      "index2": 10,
+      "size": 140,
+      "cacheable": true,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        2
+      ],
+      "issuer": "/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/babel-loader/lib/index.js!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/src/search/index.js",
+      "issuerId": null,
+      "issuerName": "./src/search/index.js",
+      "issuerPath": [
+        {
+          "id": null,
+          "identifier": "/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/node_modules/babel-loader/lib/index.js!/Users/twiglau/Desktop/Learning/Webpack/08-speed-large/src/search/index.js",
+          "name": "./src/search/index.js"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0
+    }
+  ],
+  "filteredModules": 1
+}
