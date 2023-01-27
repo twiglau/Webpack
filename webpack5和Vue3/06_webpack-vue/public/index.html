@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer" />
+    <!-- <meta name="google" content="notranslate"> -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale= 1.0, minimum-scale=1.0">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <!-- require cdn assets css -->
+    <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.css) { %>
+        <link rel="stylesheet" href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" />
+        <% } %>
+</head>
+
+<body>
+    <div id="app"></div>
+    <!-- <template id="my-app">
+        <h1>我是Vue渲染出来的</h1>
+    </template> -->
+    <!-- require cdn assets js -->
+    <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
+        <script type="text/javascript" src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
+        <% } %>
+            <!-- built files will be auto injected -->
+</body>
+
+</html>

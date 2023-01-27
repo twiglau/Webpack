@@ -1,0 +1,6 @@
+.title {
+    color: red;
+    font-weight: 700;
+    font-size: 30px;
+    user-select: none;
+}
