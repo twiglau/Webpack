@@ -1,48 +1,23 @@
 // const { Module } = require('webpack');
 const path = require('path');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { DefinePlugin } = require('webpack');
 const { VueLoaderPlugin } = require('vue-loader/dist/index')
 module.exports = {
     target: "web",
-    mode: "development",
-    devtool: "source-map",
     //No need to use the 'serve' command together with '{ watch: true }' configuration, it does not make sense.
     // watch: true, // webpack-cli 功能
     entry: "./src/main.js",
     output: {
-        path: path.resolve(__dirname, "./build"),
+        path: path.resolve(__dirname, "../build"),
         filename: "bundle.js"
     },
-    devServer: {
-        // contentBase: "./public",
-        static: {
-            directory: path.join(__dirname, 'res')
-        },
-        hot: true,
-        // host: `0.0.0.0`,
-        port: 7777,
-        open: true,
-        proxy: {
-            // "/api":"http://localhost:8888"
-            "/api": {
-                target: "http://localhost:8888",
-                pathRewrite: {
-                    "^/api": ""
-                },
-                secure: false, //默认情况下不接受HTTPS且证书无效的后端服务器.
-                changeOrigin: true
-            }
-        }
-    },
     resolve: {
-        modules: ["node_modules"],
+        // modules: ["node_modules"],
         extensions: [".js", ".json", ".mjs", ".vue", ".ts", ".jsx", ".tsx"],
         alias: {
-            "@": path.resolve(__dirname,"./src"),
-            "js": path.resolve(__dirname, "./src/js")
+            "@": path.resolve(__dirname,"../src"),
+            "js": path.resolve(__dirname, "../src/js")
         }
     },
     module: {
@@ -173,7 +148,6 @@ module.exports = {
         ]
     },
     plugins: [
-        new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             title: "🙂",
             template:"./public/index.html",
@@ -182,19 +156,6 @@ module.exports = {
             BASE_URL: "'./'",
             __VUE_OPTIONS_API__: true,
             __VUE_PROD_DEVTOOLS__: false
-        }),
-        new CopyWebpackPlugin({
-            patterns: [
-                {
-                    from: "public",
-                    // to: "build",
-                    globOptions: {
-                        ignore: [
-                            "**/index.html"
-                        ]
-                    }
-                }
-            ]
         }),
         new VueLoaderPlugin(),
     ]

@@ -1,0 +1,1 @@
+console.log('从这里加载资源abc');
